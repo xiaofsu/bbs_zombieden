@@ -2,7 +2,7 @@ name: nodejs bbs zombieden auto sign
 
 on:
   schedule:
-    - cron: "0 11,21 * * *"
+    - cron: "0 11 * * *"
 
 jobs:
   one:
@@ -22,5 +22,6 @@ jobs:
           DD_TOKEN: ${{ secrets.DD_TOKEN }}
           DD_SECRET: ${{ secrets.DD_SECRET }}
         run: |
+          cd ./sign/
           npm install
-          node server.js
+          node sign.js

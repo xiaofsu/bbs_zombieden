@@ -1,0 +1,26 @@
+name: nodejs bbs zombieden auto sign
+
+on:
+  schedule:
+    - cron: "0 11,21 * * *"
+
+jobs:
+  one:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      # 使用 node:10
+      - name: use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      # npm install
+      - name: npm install and do sign
+        env:
+          BBS_ZOMBIEDN_COOKIE: ${{ secrets.BBS_ZOMBIEDN_COOKIE }}
+          DD_TOKEN: ${{ secrets.DD_TOKEN }}
+          DD_SECRET: ${{ secrets.DD_SECRET }}
+        run: |
+          npm install
+          node server.js

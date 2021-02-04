@@ -1,2 +1,5 @@
-# bbs_zombieden_auto_sign_reply
-僵尸乐园自动签到&amp;抽奖&amp;回复帖子
+# actions
+
+僵尸乐园自动回复&签到&抽奖
+
+使用`github actions`来进行操作

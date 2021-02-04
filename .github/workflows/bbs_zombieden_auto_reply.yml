@@ -20,6 +20,7 @@ jobs:
         env:
           BBS_ZOMBIEDN_COOKIE: ${{ secrets.BBS_ZOMBIEDN_COOKIE }}
           BBS_ZOMBIEDN_NAME: ${{ secrets.BBS_ZOMBIEDN_NAME }}
+          BBS_ZOMBIEDN_FROMHASH: ${{ secrets.BBS_ZOMBIEDN_FROMHASH }}
         run: |
           cd ./reply/
           npm install

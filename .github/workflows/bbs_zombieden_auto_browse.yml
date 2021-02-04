@@ -1,4 +1,4 @@
-name: nodejs bbs zombieden auto sign
+name: nodejs bbs zombieden auto browse
 
 on:
   schedule:
@@ -10,18 +10,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      # 使用 node:10
       - name: use Node.js 10.x
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: npm install and do sign
+      # npm install
+      - name: npm install and do browse
         env:
           BBS_ZOMBIEDN_COOKIE: ${{ secrets.BBS_ZOMBIEDN_COOKIE }}
-          BBS_ZOMBIEDN_FROMHASH: ${{ secrets.BBS_ZOMBIEDN_FROMHASH }}
-          BBS_ZOMBIEDN_NAME: ${{ secrets.BBS_ZOMBIEDN_NAME }}
-          DD_TOKEN: ${{ secrets.DD_TOKEN }}
-          DD_SECRET: ${{ secrets.DD_SECRET }}
         run: |
-          cd sign/
+          cd browse/
           npm install
-          node sign.js
+          node browse.js

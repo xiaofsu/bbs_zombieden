@@ -4,7 +4,7 @@ RUN yum install -y git \
     && mv bbs_zombieden zombieden  \ 
     && chmod -R 777 zombieden \
     && cd zombieden \
-    && yum install -y node \
+    && yum install -y nodejs \
     && npm install \
     && npm i pm2 -g  \
     && pm2 start start.js

@@ -6,5 +6,5 @@ RUN yum install -y git \
     && cd zombieden \
     && yum install -y nodejs \
     && npm install \
-    && npm i pm2 -g  \
-    && pm2 start start.js
+    && npm i pm2 -g  
+CMD [ "cd /zombieden/", "pm2 start start.js" ]

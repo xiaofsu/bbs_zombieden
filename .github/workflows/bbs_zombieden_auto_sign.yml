@@ -22,6 +22,6 @@ jobs:
           DD_TOKEN: ${{ secrets.DD_TOKEN }}
           DD_SECRET: ${{ secrets.DD_SECRET }}
         run: |
-          cd sign/
+          cd ./sign/
           npm install
           node sign.js

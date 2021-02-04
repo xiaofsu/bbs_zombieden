@@ -64,3 +64,7 @@ function getUserId() {
     var num = Min + Math.round(Rand * Range); //四舍五入
     return num;
 }
+
+module.exports = {
+    browse
+}

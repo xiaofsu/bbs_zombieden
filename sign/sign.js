@@ -124,3 +124,8 @@ function ddBotNotify(text) {
     sRequest("POST", `${url}`, options);
   }
 }
+
+
+module.exports = {
+  sign
+}

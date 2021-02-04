@@ -133,3 +133,7 @@ function replyUrl(reqUrl) {
         console.log(`访问状态：${response.statusCode}`);
     });
 }
+
+module.exports = {
+    reply
+}

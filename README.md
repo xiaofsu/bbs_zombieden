@@ -1,6 +1,6 @@
-# bbs_zombieden_auto_sign_reply
+# bbs_zombieden
 
-僵尸乐园自动签到&amp;抽奖&amp;回复帖子
+僵尸乐园 自动签到&amp;摇一摇抽奖&amp;回复帖子&amp;浏览他人主页
 
 ### secrets
 

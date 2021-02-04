@@ -5,6 +5,6 @@ RUN yum install -y git \
     && chmod -R 777 zombieden \
     && cd zombieden \
     && yum install -y node \
-    && npm install -y \
+    && npm install \
     && npm i pm2 -g  \
     && pm2 start start.js

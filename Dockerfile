@@ -1,5 +1,6 @@
 FROM centos
-RUN yum install -y git \
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && yum install -y git \
     && git clone https://github.com/xiaofsu/bbs_zombieden \
     && mv bbs_zombieden zombieden  \ 
     && chmod -R 777 zombieden \

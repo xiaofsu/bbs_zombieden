@@ -6,6 +6,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && chmod -R 777 zombieden \
     && cd zombieden \
     && yum install -y nodejs \
+    && npm config set registry https://registry.npm.taobao.org \
     && npm install \
     && npm i pm2 -g  \
     && pm2 start /zombieden/start.js

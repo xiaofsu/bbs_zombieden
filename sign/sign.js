@@ -6,11 +6,11 @@ const request = require('request');
 const crypto = require('crypto');
 
 
-const BBS_ZOMBIEDN_COOKIE = process.env.BBS_ZOMBIEDN_COOKIE;
-const BBS_ZOMBIEDN_NAME = process.env.BBS_ZOMBIEDN_NAME;
-const BBS_ZOMBIEDN_FROMHASH = process.env.BBS_ZOMBIEDN_FROMHASH;
-const DD_TOKEN = process.env.DD_TOKEN;
-const DD_SECRET = process.env.DD_SECRET;
+const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
+const BBS_ZOMBIEDN_NAME = config['BBS_ZOMBIEDN_NAME'];
+const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
+const DD_TOKEN = config['DD_TOKEN'];
+const DD_SECRET = config['DD_SECRET'];
 
 
 

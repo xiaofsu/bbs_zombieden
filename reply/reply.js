@@ -4,11 +4,13 @@ const sRequest = require("sync-request");
 const request = require('request');
 // 解析html
 const cheerio = require('cheerio')
+//读取配置文件
+var config = require('../config/config');
 
+const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
+const BBS_ZOMBIEDN_NAME = config['BBS_ZOMBIEDN_NAME'];
+const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
 
-const BBS_ZOMBIEDN_COOKIE = process.env.BBS_ZOMBIEDN_COOKIE;
-const BBS_ZOMBIEDN_NAME = process.env.BBS_ZOMBIEDN_NAME;
-const BBS_ZOMBIEDN_FROMHASH = process.env.BBS_ZOMBIEDN_FROMHASH;
 
 
 /**

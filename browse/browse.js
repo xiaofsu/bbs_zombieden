@@ -1,7 +1,9 @@
 // 异步请求
 const request = require('request');
 
-const BBS_ZOMBIEDN_COOKIE = process.env.BBS_ZOMBIEDN_COOKIE;
+const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
+
+
 /**
 * @Author: xiaoFsu
 * @Time: 2021.02.04 9:44:34

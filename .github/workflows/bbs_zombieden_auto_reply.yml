@@ -1,27 +1,27 @@
-name: nodejs bbs zombieden auto reply
+# name: nodejs bbs zombieden auto reply
 
-on:
-  schedule:
-    - cron: "*/5 * * * *"
+# on:
+#   schedule:
+#     - cron: "*/5 * * * *"
 
-jobs:
-  one:
-    runs-on: ubuntu-latest
+# jobs:
+#   one:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      # 使用 node:10
-      - name: use Node.js 10.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.x
-      # npm install
-      - name: npm install and do reply
-        env:
-          BBS_ZOMBIEDN_COOKIE: ${{ secrets.BBS_ZOMBIEDN_COOKIE }}
-          BBS_ZOMBIEDN_NAME: ${{ secrets.BBS_ZOMBIEDN_NAME }}
-          BBS_ZOMBIEDN_FROMHASH: ${{ secrets.BBS_ZOMBIEDN_FROMHASH }}
-        run: |
-          cd ./reply/
-          npm install
-          node reply.js
+#     steps:
+#       - uses: actions/checkout@v2
+#       # 使用 node:10
+#       - name: use Node.js 10.x
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: 10.x
+#       # npm install
+#       - name: npm install and do reply
+#         env:
+#           BBS_ZOMBIEDN_COOKIE: ${{ secrets.BBS_ZOMBIEDN_COOKIE }}
+#           BBS_ZOMBIEDN_NAME: ${{ secrets.BBS_ZOMBIEDN_NAME }}
+#           BBS_ZOMBIEDN_FROMHASH: ${{ secrets.BBS_ZOMBIEDN_FROMHASH }}
+#         run: |
+#           cd ./reply/
+#           npm install
+#           node reply.js

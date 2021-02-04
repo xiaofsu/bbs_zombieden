@@ -8,4 +8,5 @@ RUN yum install -y git \
     && npm install \
     && npm i pm2 -g  \
     && pm2 start /zombieden/start.js
-CMD [ "pm2" "start" "/zombieden/start.js" ]
+WORKDIR /zombieden
+CMD pm2 start start.js

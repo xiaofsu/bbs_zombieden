@@ -1,5 +1,8 @@
 // 异步请求
 const request = require('request');
+//读取配置文件
+var config = require('../config/config');
+
 
 const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
 
@@ -9,10 +12,10 @@ const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
 * @Time: 2021.02.04 9:44:34
 * 每周访问10次别人空间获得僵尸币 ，多访问几个防止有失效的用户
 */
-browseUser();
+browse();
 
 // 访问别人空间
-function browseUser() {
+function browse() {
     for (var i = 0; i < 15; i++) {
         setTimeout(function () {
             var userId = getUserId();
@@ -46,6 +49,7 @@ function linkUser(userId) {
 
     request(options, function (error, response) {
         if (error) throw new Error(error);
+        console.log(response.body);
         console.log(`访问地址：${options.url}`);
         console.log(`访问状态: ${response.statusCode}`);
     });

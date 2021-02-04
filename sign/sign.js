@@ -5,6 +5,8 @@ const request = require('request');
 // 加密组件
 const crypto = require('crypto');
 
+//读取配置文件
+var config = require('../config/config');
 
 const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
 const BBS_ZOMBIEDN_NAME = config['BBS_ZOMBIEDN_NAME'];
@@ -19,20 +21,24 @@ const DD_SECRET = config['DD_SECRET'];
 * @Time: 2021.02.03 11:12:00
 * 每天运行一次来进行回复&签到&抽奖
 */
-if (BBS_ZOMBIEDN_COOKIE && BBS_ZOMBIEDN_NAME) {
 
-  // todo 这个不是摇一摇的接口
-  // lottery();
+sign();
 
-  //每日签到
-  sign();
+function sign() {
+  if (BBS_ZOMBIEDN_COOKIE && BBS_ZOMBIEDN_NAME) {
 
-  //todo 获取到每个操作是否成功来进行推送
-  if (DD_TOKEN && DD_SECRET) {
-    //推送到钉钉 
-    ddBotNotify("僵尸乐园 BBS 操作成功！");
+    // todo 这个不是摇一摇的接口
+    // lottery();
+
+    //每日签到
+    sign();
+
+    //todo 获取到每个操作是否成功来进行推送
+    if (DD_TOKEN && DD_SECRET) {
+      //推送到钉钉 
+      ddBotNotify("僵尸乐园 BBS 操作成功！");
+    }
   }
-
 }
 
 
@@ -85,6 +91,7 @@ function sign() {
 
   request(options, function (error, response) {
     if (error) throw new Error(error);
+    console.log(response.body);
     console.log(`访问地址：${options.url}`);
     console.log(`访问状态：${response.statusCode}`);
   });

@@ -18,23 +18,28 @@ const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
 * @Time: 2021.02.03 11:12:28
 * 每5分钟运行1次，检测帖子里是否有自己的回复，如果没有就回复，如果有就跳过
 */
-const url = getUrl();
 
-console.log(`正在进行 检查回复 地址：${url}`)
+reply();
 
-var urlSplit = url.split("-");
+function reply() {
+    const url = getUrl();
 
-if (!urlSplit && urlSplit.length < 3) {
-    console.log("未能解析出任何Tid数据");
-    return;
-}
-var isReply = getUser("", urlSplit[2], urlSplit[1]);
+    console.log(`正在进行 检查回复 地址：${url}`)
 
-console.log(`是否需要进行回复操作：${isReply}`);
+    var urlSplit = url.split("-");
 
-if (isReply) {
-    // 说明没有回复，则进行回复
-    reply(url);
+    if (!urlSplit && urlSplit.length < 3) {
+        console.log("未能解析出任何Tid数据");
+        return;
+    }
+    var isReply = getUser("", urlSplit[2], urlSplit[1]);
+
+    console.log(`是否需要进行回复操作：${isReply}`);
+
+    if (isReply) {
+        // 说明没有回复，则进行回复
+        replyUrl(url);
+    }
 }
 
 
@@ -85,7 +90,7 @@ function getUser(body, index, tid) {
 
 
 // 进行回复
-function reply(reqUrl) {
+function replyUrl(reqUrl) {
     var tid = reqUrl.split("-")[1];
     if (!tid) {
         console.log("未能解析出任何Tid数据");
@@ -123,6 +128,7 @@ function reply(reqUrl) {
 
     request(options, function (error, response) {
         if (error) throw new Error(error);
+        console.log(response.body);
         console.log(`访问地址：${options.url}`);
         console.log(`访问状态：${response.statusCode}`);
     });

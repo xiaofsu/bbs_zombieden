@@ -2,8 +2,6 @@
 const sRequest = require("sync-request");
 // 异步请求
 const request = require('request');
-// 解析html
-const cheerio = require('cheerio')
 // 加密组件
 const crypto = require('crypto');
 
@@ -23,13 +21,13 @@ const DD_SECRET = process.env.DD_SECRET;
 */
 if (BBS_ZOMBIEDN_COOKIE && BBS_ZOMBIEDN_NAME) {
 
-  // 摇一摇抽奖  todo 这个不是摇一摇的接口
+  // todo 这个不是摇一摇的接口
   // lottery();
 
   //每日签到
   sign();
 
-
+  //todo 获取到每个操作是否成功来进行推送
   if (DD_TOKEN && DD_SECRET) {
     //推送到钉钉 
     ddBotNotify("僵尸乐园 BBS 操作成功！");

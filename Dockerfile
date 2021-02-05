@@ -7,8 +7,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && cd zombieden \
     && yum install -y nodejs \
     && npm config set registry https://registry.npm.taobao.org \
-    && npm install 
-    # && npm i pm2 -g  \
-    # && pm2 start /zombieden/start.js
+    && npm install \
+    && npm i pm2 -g  \
+    && pm2 start /zombieden/start.js
 WORKDIR /zombieden
-CMD nohup node ./start.js
+CMD pm2 start start.js && tail -f start.js

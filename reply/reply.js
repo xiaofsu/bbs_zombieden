@@ -68,11 +68,6 @@ function getUser(body, index, tid) {
 
     var text = $(".i.y").find('a').text();
 
-    if ($(".pt.hm").text().indexOf("无权发帖")) {
-        console.error(` 无法进行回复。 \n 检查地址：https://bbs.zombieden.cn/thread-${tid}-${index}-1.html`)
-        return false;
-    }
-
     if (text.indexOf(BBS_ZOMBIEDN_NAME) == -1) {
         if (body != "" && body == text) {
             return true;

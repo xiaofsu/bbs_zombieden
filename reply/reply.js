@@ -2,19 +2,21 @@
 const sRequest = require("sync-request");
 // 解析html
 const cheerio = require('cheerio')
-//读取配置文件
-var config = require('../config/config');
+// 读取配置文件
+const config = require('../config/config');
 
 const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
 const BBS_ZOMBIEDN_NAME = config['BBS_ZOMBIEDN_NAME'];
 const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
 
 
+var lastTid = "";
+
 
 /**
 * @Author: xiaoFsu
 * @Time: 2021.02.03 11:12:28
-* 每5分钟运行1次，检测帖子里是否有自己的回复，如果没有就回复，如果有就跳过
+* 每分钟运行1次，检测否有自己的回复，如果没有就回复，如果有就跳过
 */
 
 reply();
@@ -22,6 +24,9 @@ reply();
 function reply() {
 
     const url = getUrl();
+    if(!url){
+        return;
+    }
     var urlSplit = url.split("-");
 
     if (!urlSplit && urlSplit.length < 3) {
@@ -33,22 +38,33 @@ function reply() {
     console.log(`${new Date()} 是否进行回复操作：${isReply}`);
 
     if (isReply) {
-        // 说明没有回复，则进行回复
         replyUrl(url);
     }
+
+    
 }
 
 
 // 获取到最新的地址
 function getUrl() {
+
     var options = {
         'headers': {
             'Cookie': BBS_ZOMBIEDN_COOKIE,
         }
     };
+
     var req = sRequest("GET", "https://bbs.zombieden.cn/", options);
     var $ = cheerio.load(req.getBody("utf-8"));
     newUrl = $('#portal_block_196_content').find('li').slice(0).eq(0).find('a').slice(0).eq(0).attr('href');
+
+    var tid = newUrl.split("-")[1];
+    if(lastTid != "" && lastTid == tid){
+        console.log(`检测到已经访问过此页面：${tid}，不进行处理。`);
+        return false;
+    }
+
+    lastTid = tid;
     return newUrl;
 }
 

@@ -39,5 +39,7 @@ screenshot
 
 # test file
 test.js
+*.txt
+/config
 
 build

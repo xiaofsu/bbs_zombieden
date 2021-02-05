@@ -4,7 +4,7 @@ var replyNum = 0, signNum = 0, browseNum = 0;
 var reply, browse, sign;
 
 // 每5分钟check一下需不需要回复
-schedule.scheduleJob('0 0/3 * * * *', () => {
+schedule.scheduleJob('23 0/1 * * * *', () => {
     console.log(`${new Date()} 开始执行 reply操作`);
     replyNum++;
     console.log(`第 ${replyNum} 次访问`);

@@ -1,5 +1,7 @@
-// 异步请求
-const request = require('request');
+// 同步请求
+const sRequest = require("sync-request");
+// 解析html
+const cheerio = require('cheerio')
 //读取配置文件
 var config = require('../config/config');
 
@@ -28,6 +30,7 @@ function browse() {
 
 // 请求访问
 function linkUser(userId) {
+    console.log(`${new Date()} 访问他人空间。`);
     var options = {
         url: `https://bbs.zombieden.cn/space-uid-${userId}.html`,
         "headers": {
@@ -47,12 +50,16 @@ function linkUser(userId) {
         "mode": "cors"
     }
 
-    request(options, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-        console.log(`访问地址：${options.url}`);
-        console.log(`访问状态: ${response.statusCode}`);
-    });
+    var req = sRequest(options.method, options.url, options);
+    var $ = cheerio.load(req.getBody("utf-8"));
+    var href = $("#pt").find('a').slice(0).eq(1).attr('href');
+    var user = $("#pt").find('a').slice(0).eq(1).text();
+    if (href || user) {
+        console.log(` 访问成功。\n 访问用户：${user} \n 访问地址：${href}`);
+    } else {
+        console.error(` 访问失败。\n 访问地址：${options.url}`)
+    }
+    console.log();
 }
 
 // 获取随机的用户ID

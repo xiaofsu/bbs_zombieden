@@ -37,4 +37,7 @@ screenshot
 .firebase
 .eslintcache
 
+# test file
+test.js
+
 build

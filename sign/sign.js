@@ -1,7 +1,5 @@
 // 同步请求
 const sRequest = require("sync-request");
-// 异步请求
-const request = require('request');
 // 加密组件
 const crypto = require('crypto');
 
@@ -27,6 +25,7 @@ sign();
 function sign() {
   if (BBS_ZOMBIEDN_COOKIE && BBS_ZOMBIEDN_NAME) {
 
+    console.log(`${new Date()} 进行抽奖签到`)
     // todo 这个不是摇一摇的接口
     // lottery();
 
@@ -89,16 +88,15 @@ function sign() {
     "mode": "cors"
   }
 
-  request(options, function (error, response) {
-    if (error) throw new Error(error);
-    console.log(response.body);
-    console.log(`访问地址：${options.url}`);
-    console.log(`访问状态：${response.statusCode}`);
-  });
+  var req = sRequest(`${options.method}`, `${options.url}`, options);
+  if (req.getBody("utf-8").indexOf("签到成功")) {
+    console.log(` 签到成功。 \n ${html.substring(html.indexOf(`<div class="c">`) + 16, html.indexOf("</div") - 1)}`);
+  } else {
+    console.error(` 签到失败。`)
+  }
+
+  console.log();
 };
-
-
-
 
 
 // 发送钉钉消息

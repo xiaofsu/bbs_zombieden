@@ -1,7 +1,5 @@
 // 同步请求
 const sRequest = require("sync-request");
-// 异步请求
-const request = require('request');
 // 解析html
 const cheerio = require('cheerio')
 //读取配置文件
@@ -22,19 +20,17 @@ const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
 reply();
 
 function reply() {
+
     const url = getUrl();
-
-    console.log(`正在进行 检查回复 地址：${url}`)
-
     var urlSplit = url.split("-");
 
     if (!urlSplit && urlSplit.length < 3) {
-        console.log("未能解析出任何Tid数据");
+        console.log(` 未能解析出任何Tid数据，不进行回复。 \n 解析到的地址为：${url}`);
         return;
     }
     var isReply = getUser("", urlSplit[2], urlSplit[1]);
 
-    console.log(`是否需要进行回复操作：${isReply}`);
+    console.log(`${new Date()} 是否进行回复操作：${isReply}`);
 
     if (isReply) {
         // 说明没有回复，则进行回复
@@ -51,7 +47,7 @@ function getUrl() {
         }
     };
     var req = sRequest("GET", "https://bbs.zombieden.cn/", options);
-    var $ = cheerio.load(req.body);
+    var $ = cheerio.load(req.getBody("utf-8"));
     newUrl = $('#portal_block_196_content').find('li').slice(0).eq(0).find('a').slice(0).eq(0).attr('href');
     return newUrl;
 }
@@ -62,7 +58,6 @@ function getUrl() {
 // 获取到水贴的人都是哪些
 function getUser(body, index, tid) {
     // 需要将url 进行+1 操作来确保确实没有回复这个帖子
-    console.log(`获取到水贴的所有人：https://bbs.zombieden.cn/thread-${tid}-${index}-1.html`);
     var options = {
         'headers': {
             'Cookie': BBS_ZOMBIEDN_COOKIE,
@@ -72,12 +67,16 @@ function getUser(body, index, tid) {
     const $ = cheerio.load(req.getBody("utf-8"));
 
     var text = $(".i.y").find('a').text();
+
+    if ($(".pt.hm").text().indexOf("无权发帖")) {
+        console.error(` 无法进行回复。 \n 检查地址：https://bbs.zombieden.cn/thread-${tid}-${index}-1.html`)
+        return false;
+    }
+
     if (text.indexOf(BBS_ZOMBIEDN_NAME) == -1) {
         if (body != "" && body == text) {
-            // 说明重复的页面数据了，证明所有页都没有回复
             return true;
         } else {
-            // 没有回复，检查下一页
             var i = Number(index);
             i++;
             return getUser(text, i, tid);
@@ -91,11 +90,8 @@ function getUser(body, index, tid) {
 
 // 进行回复
 function replyUrl(reqUrl) {
+
     var tid = reqUrl.split("-")[1];
-    if (!tid) {
-        console.log("未能解析出任何Tid数据");
-        return;
-    }
     // 获取随机表情包
     var emojy = new Array('32_771', '32_772', '32_773', '32_774', '32_775', '32_776', '32_777', '32_778', '32_779', '32_780', '32_781', '32_782', '32_783', '32_784', '32_785', '32_786', '32_787', '32_788', '32_789', '32_790', '32_791', '32_792', '32_793', '32_794', '32_795', '32_796', '32_797', '32_798', '32_799', '32_800', '32_801', '32_802', '32_803', '32_804', '32_805', '32_806', '32_807', '32_808', '32_809', '32_810', '32_811', '32_812', '32_813', '32_814', '32_815', '32_816', '32_817', '32_818', '32_819', '32_820', '27_127', '27_128', '27_129', '27_130', '27_131', '27_132', '27_133', '27_134', '27_135', '27_136', '27_137', '27_138', '27_139', '27_140', '27_141', '27_142', '27_143', '27_144', '27_145', '27_146', '27_147', '27_148', '27_149', '27_150', '27_151', '27_152', '27_153', '27_154', '27_155', '27_156', '27_157', '27_158', '27_159', '27_160', '27_161', '27_162', '27_163', '34_956', '34_957', '34_958', '34_959', '34_960', '34_961', '34_962', '34_963', '34_964', '34_965', '34_966', '34_967', '34_968', '34_969', '34_970', '34_971', '34_972', '34_973', '34_974', '34_975', '34_976', '34_977', '34_978', '34_979', '34_980', '34_981', '34_982', '34_983', '34_984', '34_985', '34_986', '34_987', '34_988', '35_989', '35_990', '35_991', '35_992', '35_993', '35_994', '35_995', '35_996', '35_997', '35_998', '35_999', '35_1000', '35_1001', '35_1002', '35_1003', '35_1004', '35_1005', '35_1006', '35_1007', '35_1008', '35_1009', '35_1010', '35_1011', '35_1012', '35_1013', '35_1014', '36_1015', '36_1016', '36_1017', '36_1018', '36_1019', '36_1020', '36_1021', '36_1022', '36_1023', '36_1024', '36_1025', '36_1026', '36_1027', '36_1028', '36_1029', '36_1030', '36_1031', '36_1032', '36_1033', '36_1034', '36_1035', '36_1036', '36_1037', '36_1038', '36_1039', '36_1040', '36_1041', '36_1042', '36_1043', '36_1044', '36_1045', '36_1046', '36_1047', '37_1048', '37_1049', '37_1050', '37_1051', '37_1052', '37_1053', '37_1054', '37_1055', '37_1056', '37_1057', '37_1058', '37_1059', '37_1060', '37_1061', '37_1062', '37_1063', '37_1064', '37_1065', '37_1066');
 
@@ -126,12 +122,16 @@ function replyUrl(reqUrl) {
         mode: "cors",
     };
 
-    request(options, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-        console.log(`访问地址：${options.url}`);
-        console.log(`访问状态：${response.statusCode}`);
-    });
+
+    var req = sRequest(options.method, options.url, options);
+    if (req.getBody("utf-8").indexOf("回复发布成功")) {
+        console.log(` 回复成功。\n 回复地址：${options.url}`);
+    } else {
+        console.error(` 回复失败。\n 回复地址：${options.url}`)
+    }
+
+    console.log();
+
 }
 
 module.exports = {

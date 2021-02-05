@@ -4,7 +4,7 @@ var replyNum = 0, signNum = 0, browseNum = 0;
 var reply, browse, sign;
 
 // 每5分钟check一下需不需要回复
-schedule.scheduleJob('0 0/5 * * * *', () => {
+schedule.scheduleJob('0 0/3 * * * *', () => {
     console.log(`${new Date()} 开始执行 reply操作`);
     replyNum++;
     console.log(`第 ${replyNum} 次访问`);
@@ -27,7 +27,7 @@ schedule.scheduleJob('0 0 1 * * *', () => {
 });
 
 // 每日0点执行登陆操作
-schedule.scheduleJob('0 5 0 * * *', () => {
+schedule.scheduleJob('0 0 0 * * *', () => {
     console.log(`${new Date()} 开始执行 sign操作`);
     signNum++;
     if (signNum <= 1) {

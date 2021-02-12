@@ -9,8 +9,8 @@ const BBS_ZOMBIEDN_COOKIE = config['BBS_ZOMBIEDN_COOKIE'];
 const BBS_ZOMBIEDN_NAME = config['BBS_ZOMBIEDN_NAME'];
 const BBS_ZOMBIEDN_FROMHASH = config['BBS_ZOMBIEDN_FROMHASH'];
 
-
-var lastTid = "";
+// 这个数值要取一下的。
+var tid = 78175;
 
 
 /**
@@ -19,61 +19,82 @@ var lastTid = "";
 * 每分钟运行1次，检测否有自己的回复，如果没有就回复，如果有就跳过
 */
 
+// 可能会有置顶的导致无法回复，更改一下
 reply();
 
 function reply() {
 
-    const url = getUrl();
-    if(!url){
-        return;
+    // 开始自增，如果没有的话，则继续访问这个，如果有的话，访问下一个。
+    const url = `https://bbs.zombieden.cn/thread-${tid}-1-1.html`;
+
+    // todo 跟上次的比较一下， 如果相差较多的话，则都访问一次。
+    // 抱歉，指定的主题不存在或已被删除或正在被审核
+    // 78174   禁水
+
+    // 检查如果是 抱歉，指定的主题不存在或已被删除或正在被审核 有段话，则保持这个ID，检查是否可以回复。否则自增
+    const check = checkUrl(tid);
+
+    // 检查通过，说明帖子存在。
+    if(check){
+
+        // 检查是否 回复过 / 禁水标志
+        var isReply = getUser("", 1, tid);
+        console.log(`${new Date()} 是否进行回复操作：${isReply}`);
+
+        if (isReply) {
+            replyUrl(url);
+        }
+
+        tid++;
+    }else{
+        console.log(`检查帖子不存在，等待下一次检查：${url}`)
     }
-    var urlSplit = url.split("-");
-
-    if (!urlSplit && urlSplit.length < 3) {
-        console.log(` 未能解析出任何Tid数据，不进行回复。 \n 解析到的地址为：${url}`);
-        return;
-    }
-    var isReply = getUser("", urlSplit[2], urlSplit[1]);
-
-    console.log(`${new Date()} 是否进行回复操作：${isReply}`);
-
-    if (isReply) {
-        replyUrl(url);
-    }
-
-    
 }
 
 
 // 获取到最新的地址
-function getUrl() {
+// function getUrl() {
 
+//     var options = {
+//         'headers': {
+//             'Cookie': BBS_ZOMBIEDN_COOKIE,
+//         }
+//     };
+
+//     var req = sRequest("GET", "https://bbs.zombieden.cn/", options);
+//     var $ = cheerio.load(req.getBody("utf-8"));
+//     newUrl = $('#portal_block_196_content').find('li').slice(0).eq(0).find('a').slice(0).eq(0).attr('href');
+
+//     var tid = newUrl.split("-")[1];
+//     if(lastTid != "" && lastTid == tid){
+//         console.log(`检测到已经访问过此页面：${tid}，不进行处理。`);
+//         return false;
+//     }
+
+//     lastTid = tid;
+//     return newUrl;
+// }
+
+
+// 检查帖子是否存在
+function checkUrl(tid){
     var options = {
         'headers': {
             'Cookie': BBS_ZOMBIEDN_COOKIE,
         }
     };
-
-    var req = sRequest("GET", "https://bbs.zombieden.cn/", options);
-    var $ = cheerio.load(req.getBody("utf-8"));
-    newUrl = $('#portal_block_196_content').find('li').slice(0).eq(0).find('a').slice(0).eq(0).attr('href');
-
-    var tid = newUrl.split("-")[1];
-    if(lastTid != "" && lastTid == tid){
-        console.log(`检测到已经访问过此页面：${tid}，不进行处理。`);
-        return false;
-    }
-
-    lastTid = tid;
-    return newUrl;
+    var req = sRequest("GET", `https://bbs.zombieden.cn/thread-${tid}-1-1.html`, options);
+    const $ = cheerio.load(req.getBody("utf-8"));
+    return $('#messagetext').text().indexOf('不存在') == -1;
 }
-
 
 
 
 // 获取到水贴的人都是哪些
 function getUser(body, index, tid) {
-    // 需要将url 进行+1 操作来确保确实没有回复这个帖子
+
+    console.log(`开始检查： https://bbs.zombieden.cn/thread-${tid}-${index}-1.html`)
+
     var options = {
         'headers': {
             'Cookie': BBS_ZOMBIEDN_COOKIE,
@@ -82,12 +103,22 @@ function getUser(body, index, tid) {
     var req = sRequest("GET", `https://bbs.zombieden.cn/thread-${tid}-${index}-1.html`, options);
     const $ = cheerio.load(req.getBody("utf-8"));
 
+
+    var reply = $(".t_f").text();
+
+    if(reply.indexOf("禁水") != -1){
+        console.log('帖子内容包含禁水，不进行回复。' + tid);
+        return false;
+    }
+
+    // 所有回帖人的名称
     var text = $(".i.y").find('a').text();
 
     if (text.indexOf(BBS_ZOMBIEDN_NAME) == -1) {
         if (body != "" && body == text) {
             return true;
         } else {
+            // 检查其他页面的数据是否进行了回复。
             var i = Number(index);
             i++;
             return getUser(text, i, tid);
@@ -135,10 +166,13 @@ function replyUrl(reqUrl) {
 
 
     var req = sRequest(options.method, options.url, options);
-    if (req.getBody("utf-8").indexOf("回复发布成功")) {
-        console.log(` 回复成功。\n 回复地址：${options.url}`);
+
+    console.log(req.getBody('utf-8'));
+
+    if (req.getBody("utf-8").indexOf("回复发布成功") != -1) {
+        console.log(`回复成功。`);
     } else {
-        console.error(` 回复失败。\n 回复地址：${options.url}`)
+        console.error(`回复失败。\n 回复地址：${options.url}`)
     }
 
     console.log();
